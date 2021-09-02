@@ -14,10 +14,18 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ImageModel : NSObject
 
 +(ImageModel*)sharedInstance;
-
 -(UIImage*)getImageWithName:(NSString*)name;
 
-@property (strong, nonatomic) NSArray* imageNames;
+
+// for the flip assignment - 1:
+//+(ImageModel*)sharedInstance;
+//-(UIImage*)getImageWithName:(NSString*)name;
+-(UIImage*)getImageWithIndex:(NSInteger)index;
+-(NSInteger)numberOfImages;
+-(NSString*)getImageNameForIndex:(NSInteger)index;
+
+
+
 
 @end
 
