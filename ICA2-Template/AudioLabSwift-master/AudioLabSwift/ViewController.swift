@@ -9,14 +9,14 @@
 import UIKit
 import Metal
 
+
+let AUDIO_BUFFER_SIZE = 1024*4
+
+
 class ViewController: UIViewController {
 
-    struct AudioConstants{
-        static let AUDIO_BUFFER_SIZE = 1024*100
-    }
     
-    // setup audio model
-    let audio = AudioModel(buffer_size: AudioConstants.AUDIO_BUFFER_SIZE)
+    let audio = AudioModel(buffer_size: AUDIO_BUFFER_SIZE)
     lazy var graph:MetalGraph? = {
         return MetalGraph(mainView: self.view)
     }()
@@ -29,23 +29,16 @@ class ViewController: UIViewController {
         // add in graphs for display
         graph?.addGraph(withName: "fft",
                         shouldNormalize: true,
-                        numPointsInGraph: AudioConstants.AUDIO_BUFFER_SIZE/2)
+                        numPointsInGraph: AUDIO_BUFFER_SIZE/2)
         
-        graph?.addGraph(withName: "equalizer",
-            shouldNormalize: true,
-            numPointsInGraph: 20)
-
         graph?.addGraph(withName: "time",
             shouldNormalize: false,
-            numPointsInGraph: AudioConstants.AUDIO_BUFFER_SIZE)
-
+            numPointsInGraph: AUDIO_BUFFER_SIZE)
         
-        
-        
-        
-        // start up the audio model here, querying microphone
+        // just start up the audio model here
         audio.startMicrophoneProcessing(withFps: 10)
-
+        //audio.startProcesingAudioFileForPlayback()
+        audio.startProcessingSinewaveForPlayback(withFreq: 630.0)
         audio.play()
         
         // run the loop for updating the graph peridocially
@@ -56,29 +49,18 @@ class ViewController: UIViewController {
        
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        audio.pause()
-    }
     
-    // periodically, update the graph with refreshed FFT Data
     @objc
     func updateGraph(){
         self.graph?.updateGraph(
             data: self.audio.fftData,
             forKey: "fft"
         )
-
+        
         self.graph?.updateGraph(
             data: self.audio.timeData,
             forKey: "time"
         )
-
-        self.graph?.updateGraph(
-            data: self.audio.equalizerData,
-            forKey: "equalizer"
-        )
-        
-        
         
     }
     
