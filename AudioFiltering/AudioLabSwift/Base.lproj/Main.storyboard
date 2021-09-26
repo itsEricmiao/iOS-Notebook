@@ -17,33 +17,62 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="TLG-o7-BSw">
-                                <rect key="frame" x="18" y="138" width="176" height="31"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="172" id="EDX-pg-H7k"/>
-                                </constraints>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="15000" minValue="15000" maxValue="20000" translatesAutoresizingMaskIntoConstraints="NO" id="TLG-o7-BSw">
+                                <rect key="frame" x="40" y="148" width="334" height="31"/>
+                                <connections>
+                                    <action selector="frequencySliderOnChange:" destination="e34-9C-hao" eventType="valueChanged" id="zVM-aC-2yG"/>
+                                </connections>
                             </slider>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c8j-wZ-cYw">
-                                <rect key="frame" x="228" y="138" width="141" height="31"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="filled" title="Test Anlysis"/>
-                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Frequency: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Ae-1x-SjL">
+                                <rect key="frame" x="42" y="100" width="330" height="27"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User is: " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="agq-ts-6Dl">
+                                <rect key="frame" x="42" y="206" width="330" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="GzV-dL-YAc"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Graph: FFT of the microphone data in decibels" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ljt-OZ-mmN">
+                                <rect key="frame" x="20" y="276" width="374" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="JoV-eE-8QO"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="JoV-eE-8QO" firstAttribute="trailing" secondItem="c8j-wZ-cYw" secondAttribute="trailing" constant="45" id="IKR-PP-5Xx"/>
-                            <constraint firstItem="TLG-o7-BSw" firstAttribute="leading" secondItem="BtW-tJ-w2y" secondAttribute="leadingMargin" id="Ski-VV-xHz"/>
-                            <constraint firstItem="c8j-wZ-cYw" firstAttribute="top" secondItem="JoV-eE-8QO" secondAttribute="top" constant="50" id="TkQ-4N-IrG"/>
-                            <constraint firstItem="TLG-o7-BSw" firstAttribute="top" secondItem="JoV-eE-8QO" secondAttribute="top" constant="50" id="WrL-H8-djI"/>
-                            <constraint firstItem="c8j-wZ-cYw" firstAttribute="leading" secondItem="TLG-o7-BSw" secondAttribute="trailing" constant="36" id="m8N-QQ-Ye0"/>
+                            <constraint firstItem="ljt-OZ-mmN" firstAttribute="leading" secondItem="JoV-eE-8QO" secondAttribute="leading" constant="20" id="5y0-qU-0nW"/>
+                            <constraint firstItem="agq-ts-6Dl" firstAttribute="trailing" secondItem="TLG-o7-BSw" secondAttribute="trailing" id="7V3-hO-iCQ"/>
+                            <constraint firstItem="JoV-eE-8QO" firstAttribute="trailing" secondItem="ljt-OZ-mmN" secondAttribute="trailing" constant="20" id="8I1-j9-ud6"/>
+                            <constraint firstItem="5Ae-1x-SjL" firstAttribute="trailing" secondItem="TLG-o7-BSw" secondAttribute="trailing" id="91j-7W-yGf"/>
+                            <constraint firstItem="TLG-o7-BSw" firstAttribute="top" secondItem="BtW-tJ-w2y" secondAttribute="top" constant="148" id="J0y-Wb-Cz6"/>
+                            <constraint firstItem="agq-ts-6Dl" firstAttribute="top" secondItem="TLG-o7-BSw" secondAttribute="bottom" constant="28" id="dXv-kN-20H"/>
+                            <constraint firstItem="TLG-o7-BSw" firstAttribute="centerX" secondItem="BtW-tJ-w2y" secondAttribute="centerX" id="eKE-zs-k0s"/>
+                            <constraint firstItem="5Ae-1x-SjL" firstAttribute="leading" secondItem="TLG-o7-BSw" secondAttribute="leading" id="iyd-qg-KIS"/>
+                            <constraint firstItem="5Ae-1x-SjL" firstAttribute="top" secondItem="JoV-eE-8QO" secondAttribute="top" constant="12" id="pWO-Da-eNG"/>
+                            <constraint firstItem="agq-ts-6Dl" firstAttribute="leading" secondItem="TLG-o7-BSw" secondAttribute="leading" id="s5r-5q-b4q"/>
+                            <constraint firstItem="TLG-o7-BSw" firstAttribute="top" secondItem="5Ae-1x-SjL" secondAttribute="bottom" constant="21" id="uiW-je-f3I"/>
+                            <constraint firstItem="ljt-OZ-mmN" firstAttribute="top" secondItem="agq-ts-6Dl" secondAttribute="bottom" constant="30" id="xdA-8h-cyH"/>
+                            <constraint firstItem="TLG-o7-BSw" firstAttribute="leading" secondItem="JoV-eE-8QO" secondAttribute="leading" constant="42" id="zAt-Bs-eqT"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="6bk-0i-7o1"/>
+                    <connections>
+                        <outlet property="audioFrequencySlider" destination="TLG-o7-BSw" id="OdN-MC-8db"/>
+                        <outlet property="frequencyLabel" destination="5Ae-1x-SjL" id="e9U-Jf-O2a"/>
+                        <outlet property="userActionLabel" destination="agq-ts-6Dl" id="BcR-4K-pHQ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8MZ-ZE-hPr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1457.9710144927537" y="1489.9553571428571"/>
+            <point key="canvasLocation" x="1547.8260869565217" y="1488.6160714285713"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">

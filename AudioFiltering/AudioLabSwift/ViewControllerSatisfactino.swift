@@ -45,7 +45,6 @@ class ViewControllerSatisfaction: UIViewController {
         
         // start up the audio model here, querying microphone
         audio.startSpeakerProcessing(withFps: 10)
-
         audio.play()
         
         // run the loop for updating the graph peridocially
