@@ -40,9 +40,6 @@ class ViewControllerSatisfaction: UIViewController {
             numPointsInGraph: AudioConstants.AUDIO_BUFFER_SIZE)
 
         
-        
-        
-        
         // start up the audio model here, querying microphone
         audio.startSpeakerProcessing(withFps: 10)
         audio.play()

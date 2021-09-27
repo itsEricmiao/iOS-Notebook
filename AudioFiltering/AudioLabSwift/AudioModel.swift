@@ -17,7 +17,10 @@ class AudioModel {
     // the user can access these arrays at any time and plot them if they like
     var timeData:[Float]
     var fftData:[Float]
+    var fftDataSqr:[Float]
     var equalizerData: [Float]
+    var helper = DopplerHelper()
+    
     
     // MARK: Public Methods
     init(buffer_size:Int) {
@@ -25,8 +28,11 @@ class AudioModel {
         // anything not lazily instatntiated should be allocated here
         timeData = Array.init(repeating: 0.0, count: BUFFER_SIZE)
         fftData = Array.init(repeating: 0.0, count: BUFFER_SIZE/2)
+        fftDataSqr = Array.init(repeating: 0.0, count: BUFFER_SIZE/2)
         equalizerData = Array.init(repeating: 0.0, count: 20)
     }
+    
+    
     
     // public function for starting processing of microphone data
     func startMicrophoneProcessing(withFps:Double){
@@ -103,6 +109,8 @@ class AudioModel {
     // MARK: Private Methods
     // NONE for this model
     
+    
+    
     // MARK: Eric: Adding methods from Larson's class assignment:
     func startProcessingSinewaveForPlayback(withFreq:Float=330.0){
         sineFrequency = withFreq
@@ -120,6 +128,7 @@ class AudioModel {
     //    _     _     _     _     _     _     _     _     _     _
     //   / \   / \   / \   / \   / \   / \   / \   / \   / \   /
     //  /   \_/   \_/   \_/   \_/   \_/   \_/   \_/   \_/   \_/
+    
     var sineFrequency:Float = 0.0 { // frequency in Hz (changeable by user)
         didSet{
             // if using swift for generating the sine wave: when changed, we need to update our increment
@@ -168,6 +177,7 @@ class AudioModel {
             fftHelper!.performForwardFFT(withData: &timeData,
                                          andCopydBMagnitudeToBuffer: &fftData)
             
+            
             let equalizerBinLength = BUFFER_SIZE/(2*20)
             
             equalizerData = Array.init(repeating: 0.0, count: 20)
@@ -186,12 +196,20 @@ class AudioModel {
                 }
             }
             
+            helper.setFFTData(inputArr: self.fftData)
+            helper.setFrequency(inputVal: self.sineFrequency)
+            helper.analyze2()
+            
             // at this point, we have saved the data to the arrays:
             //   timeData: the raw audio samples
             //   fftData:  the FFT of those same samples
             // the user can now use these variables however they like
             
         }
+    }
+    
+    func getUserState()->Int{
+        return helper.getUserState()
     }
     
     @objc
@@ -254,7 +272,4 @@ class AudioModel {
             self.outputBuffer?.addNewFloatData(data, withNumSamples: Int64(numFrames))
         }
     }
-    
-    
-    
 }

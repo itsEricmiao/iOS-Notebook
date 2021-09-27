@@ -14,18 +14,19 @@ class ViewControllerModuleB: UIViewController {
     @IBOutlet weak var userActionLabel: UILabel!
     @IBOutlet weak var frequencyLabel: UILabel!
     @IBOutlet weak var audioFrequencySlider: UISlider!
+    @IBOutlet weak var startAnalyzerButton: UIButton!
     
     let graphView = UIView(frame: CGRect(x: 0, y: 150, width: 100, height: 100))
+    var ifPlay = false
+    let states = ["not gesturing", "gesturing forward", "gesturing away"]
     
     // Current state of the user
-    let state = ["not gesturing", "gesturing toward", "gesturing away"]
-    lazy var frequency = {
-        return 15000
-    }()
+    var currentState = "not gesturing"
+    var frequency = Float(15000)
     
     // Audio bufffer size
     struct AudioConstants{
-        static let AUDIO_BUFFER_SIZE = 1024*16
+        static let AUDIO_BUFFER_SIZE = 1024*4
     }
     
     let audio = AudioModel(buffer_size: AudioConstants.AUDIO_BUFFER_SIZE)
@@ -36,7 +37,7 @@ class ViewControllerModuleB: UIViewController {
     
     
     func updateUserActionLabel(index: Int = 0){
-        let currentState = state[index]
+        let currentState = states[index]
         DispatchQueue.main.async {
             self.userActionLabel.text = "User is " + currentState
         }
@@ -44,10 +45,25 @@ class ViewControllerModuleB: UIViewController {
     }
     
     
-
+    @IBAction func startAnalyzerButtonPressed(_ sender: Any) {
+        if (!ifPlay){
+            print("Start Analyzer Button Pressed")
+            self.startDetectingDopplerProcess()
+            ifPlay = !self.ifPlay
+            frequencyLabel.text = "Frequency: " + String(self.frequency) + " Hz"
+            startAnalyzerButton.setTitle("Stop", for: .normal)
+            
+        }else{
+            self.stopDetectingDopplerProcess()
+            ifPlay = false
+            startAnalyzerButton.setTitle("Start", for: .normal)
+        }
+    }
+    
+    
     // When slider changes, the text on the label changes as well
     @IBAction func frequencySliderOnChange(_ sender: UISlider) {
-        self.frequency = Int(sender.value)
+        self.frequency = sender.value
         self.audio.sineFrequency = sender.value
         self.frequencyLabel.text = "Frequency: " + String(sender.value) + " Hz"
     }
@@ -55,33 +71,42 @@ class ViewControllerModuleB: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.graphView.frame = CGRect(x: 0, y: 170, width: self.view.frame.width, height: self.view.frame.height/3)
+        self.graphView.frame = CGRect(x: 0,
+                                      y: 170,
+                                      width: self.view.frame.width,
+                                      height: self.view.frame.height/3)
+        
         self.view.addSubview(graphView)
         graph?.addGraph(withName: "microphoneData",
                         shouldNormalize: true,
-                        numPointsInGraph: AudioConstants.AUDIO_BUFFER_SIZE/2)
-
-        audio.startProcessingSinewaveForPlayback(withFreq: 15000)
-        audio.startMicrophoneProcessing(withFps: 100)
-        audio.play()
-
-        // run the loop for updating the graph peridocially
+                        numPointsInGraph: 800)
+        
         Timer.scheduledTimer(timeInterval: 0.05, target: self,
             selector: #selector(self.updateGraph),
             userInfo: nil,
             repeats: true)
     }
-    
-    
+
     override func viewDidDisappear(_ animated: Bool) {
-        audio.pause()
+        self.stopDetectingDopplerProcess()
     }
     
-    
     @objc
-    func updateGraph(){
+    func startDetectingDopplerProcess(){
+        audio.startProcessingSinewaveForPlayback(withFreq: self.frequency)
+        audio.startMicrophoneProcessing(withFps: 1000)
+        audio.play()
+    }
+    
+    func stopDetectingDopplerProcess(){
+        self.audio.pause()
+    }
+    
+    @objc func updateGraph(){
+        let zoomed = Array.init(self.audio.fftData[1200...2000])
+        self.currentState = self.states[self.audio.getUserState()]
         self.graph?.updateGraph(
-            data: self.audio.fftData,
+            data: zoomed,
             forKey: "microphoneData"
         )
     }
