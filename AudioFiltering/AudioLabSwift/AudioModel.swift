@@ -17,9 +17,11 @@ class AudioModel {
     // the user can access these arrays at any time and plot them if they like
     var timeData:[Float]
     var fftData:[Float]
-    var fftDataSqr:[Float]
     var equalizerData: [Float]
     var helper = DopplerHelper()
+    var samplingRate : Float = 0.0
+    
+    
     
     // MARK: Public Methods
     init(buffer_size:Int) {
@@ -27,8 +29,8 @@ class AudioModel {
         // anything not lazily instatntiated should be allocated here
         timeData = Array.init(repeating: 0.0, count: BUFFER_SIZE)
         fftData = Array.init(repeating: 0.0, count: BUFFER_SIZE/2)
-        fftDataSqr = Array.init(repeating: 0.0, count: BUFFER_SIZE/2)
         equalizerData = Array.init(repeating: 0.0, count: 20)
+        samplingRate = Float(self.audioManager!.samplingRate)
     }
     
     
@@ -72,6 +74,7 @@ class AudioModel {
             manager.play()
         }
     }
+    
     
     func pause() {
         self.audioManager?.inputBlock = nil
@@ -127,6 +130,7 @@ class AudioModel {
     //    _     _     _     _     _     _     _     _     _     _
     //   / \   / \   / \   / \   / \   / \   / \   / \   / \   /
     //  /   \_/   \_/   \_/   \_/   \_/   \_/   \_/   \_/   \_/
+    
     
     var sineFrequency:Float = 0.0 { // frequency in Hz (changeable by user)
         didSet{
@@ -196,6 +200,7 @@ class AudioModel {
             }
             
             helper.setFFTData(inputArr: self.fftData)
+            helper.setSamplingRate(inputRate: self.samplingRate)
             helper.setFrequency(inputVal: self.sineFrequency)
             helper.analyze()
             // at this point, we have saved the data to the arrays:
@@ -209,6 +214,9 @@ class AudioModel {
         return helper.getUserState()
     }
     
+    func resetDopplerHelper(){
+        self.helper.reset()
+    }
     @objc
     private func runEveryIntervalOutput(){
         if outputBuffer != nil {

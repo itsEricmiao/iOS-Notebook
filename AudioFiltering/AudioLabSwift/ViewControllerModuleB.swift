@@ -19,10 +19,9 @@ class ViewControllerModuleB: UIViewController {
     let graphView = UIView(frame: CGRect(x: 0, y: 150, width: 100, height: 100))
     var ifPlay = false
     let states = ["not gesturing", "gesturing forward", "gesturing away"]
-    
-    // Current state of the user
-    var currentState = "not gesturing"
-    var frequency = Float(15000)
+
+    var currentState = "not gesturing" // Init state of the user
+    var frequency = Float(15000) // Init frequency as 15000 hz
     
     // Audio bufffer size
     struct AudioConstants{
@@ -35,19 +34,17 @@ class ViewControllerModuleB: UIViewController {
         return MetalGraph(mainView: self.graphView)
     }()
     
-    
+    // function for updating the label that shows user's current action
     func updateUserActionLabel(index: Int = 0){
         let currentState = states[index]
         DispatchQueue.main.async {
             self.userActionLabel.text = "User is " + currentState
         }
-        print("User is " + currentState)
     }
     
-    
+    // when the user press the button, the button text would change
     @IBAction func startAnalyzerButtonPressed(_ sender: Any) {
         if (!ifPlay){
-            print("Start Analyzer Button Pressed")
             self.startDetectingDopplerProcess()
             ifPlay = !self.ifPlay
             frequencyLabel.text = "Frequency: " + String(self.frequency) + " Hz"
@@ -79,7 +76,7 @@ class ViewControllerModuleB: UIViewController {
         self.view.addSubview(graphView)
         graph?.addGraph(withName: "microphoneData",
                         shouldNormalize: true,
-                        numPointsInGraph: 800)
+                        numPointsInGraph: 201)
         
         Timer.scheduledTimer(timeInterval: 0.1, target: self,
             selector: #selector(self.updateGraph),
@@ -91,6 +88,7 @@ class ViewControllerModuleB: UIViewController {
         self.stopDetectingDopplerProcess()
     }
     
+    // start function for the doppler process
     @objc
     func startDetectingDopplerProcess(){
         audio.startProcessingSinewaveForPlayback(withFreq: self.frequency)
@@ -98,12 +96,17 @@ class ViewControllerModuleB: UIViewController {
         audio.play()
     }
     
+    // end function for the doppler process or when the user press stop
     func stopDetectingDopplerProcess(){
         self.audio.pause()
+        self.audio.resetDopplerHelper()
     }
     
+    // key function that keep updating the graph and the user state label
     @objc func updateGraph(){
-        let zoomed = Array.init(self.audio.fftData[1200...2000])
+        let bin = self.audio.samplingRate/Float(self.audio.fftData.count*2)
+        let index = Int(self.frequency/Float(bin))
+        let zoomed = Array.init(self.audio.fftData[index-100...index+100])
         self.currentState = self.states[self.audio.getUserState()]
         self.updateUserActionLabel(index: self.audio.getUserState())
         self.graph?.updateGraph(
