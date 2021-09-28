@@ -21,7 +21,6 @@ class AudioModel {
     var equalizerData: [Float]
     var helper = DopplerHelper()
     
-    
     // MARK: Public Methods
     init(buffer_size:Int) {
         BUFFER_SIZE = buffer_size
@@ -198,13 +197,11 @@ class AudioModel {
             
             helper.setFFTData(inputArr: self.fftData)
             helper.setFrequency(inputVal: self.sineFrequency)
-            helper.analyze2()
-            
+            helper.analyze()
             // at this point, we have saved the data to the arrays:
             //   timeData: the raw audio samples
             //   fftData:  the FFT of those same samples
             // the user can now use these variables however they like
-            
         }
     }
     
@@ -240,7 +237,6 @@ class AudioModel {
                     tempMax = fftData[i]
                 }
             }
-            
         }
     }
     

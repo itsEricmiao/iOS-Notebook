@@ -9,7 +9,6 @@
 import Foundation
 import Accelerate
 
-
 class DopplerHelper{
     var fftData:[Float] = []
     var frequency: Float = 0.0
@@ -23,9 +22,9 @@ class DopplerHelper{
     var fftCount: Int = 0
     var fftFrames: Int = 0
     
-    var allLeftMax: [Float] = []
-    var allRightMax: [Float] = []
-    
+    var allLeftPeaks: [Float] = []
+    var allRightPeaks: [Float] = []
+    var prevDiff: [Float] = []
     
     func setFFTData(inputArr: [Float]){
         fftData = inputArr
@@ -42,100 +41,81 @@ class DopplerHelper{
         return self.state
     }
     
+    
     func analyze(){
-        let peak = fftData.max()!
-        let low = fftData.min()!
-        var peakIndex = -1
-        if let p = fftData.firstIndex(of: peak) {
-            peakIndex = p
-        }
+        let bin = 48000/self.fftFrames
+        let index = Int(self.frequency/Float(bin))
         
-        var leftMax = low
-        var rightMax = low
-        var lD = 0
-        var rD = 0
-        
-        if (peakIndex > 0){
-            for i in 0...peakIndex-1{
-                if (leftMax < fftData[i]){
-                    leftMax = fftData[i]
-                    lD = peakIndex - i
+        if !self.fftData[0].isInfinite{
+            let leftArr = Array.init(self.fftData[index-100...index-10])
+            let rightArr = Array.init(self.fftData[index+10...index+100])
+            
+            let leftPeak = self.takeLocalMaximal(targetArr: leftArr)
+            let rightPeak = self.takeLocalMaximal(targetArr: rightArr)
+
+            if allRightPeaks.count > 1{
+                let lastLPeak = allLeftPeaks.last!
+                let lastRPeak = allRightPeaks.last!
+                
+                print(lastLPeak, leftPeak, lastLPeak - leftPeak)
+                print(lastRPeak, rightPeak, lastRPeak - rightPeak)
+                
+                let diffR = rightPeak - lastRPeak
+                let diffL = leftPeak - lastLPeak
+                
+                if (diffR > 0 || diffL < 0){
+                    self.state = 1
+                }
+                else if (diffR < 0 || diffL > 0){
+                    self.state = 2
+                }
+                else{
+                    self.state = 0
                 }
             }
-        }
-       
-        if (peakIndex < fftData.count-1){
-            for i in peakIndex+1...fftData.count-1{
-                if (rightMax < fftData[i]){
-                    rightMax = fftData[i]
-                    rD = i - peakIndex
-                }
-            }
-        }
-        
-        
-        print("peak ", String(peak), "peak index ", String(peakIndex))
-        print("left Max: ", String(leftMax), "right Max: ", String(rightMax))
-        print("LM distance:",String(lD),  "RM distance", String(rD))
-        print()
-        
-        if (rightMax > leftMax && rD < lD){
-            print("Moving toward")
-        }
-        else if (rightMax < leftMax && rD > lD){
-            print("Moving Away")
-        }else{
-            print("Static")
+            
+            allLeftPeaks.append(leftPeak)
+            allRightPeaks.append(rightPeak)
+            
+            print()
         }
     }
     
-    func analyze2(){
-//        BufferSize = 2048
-//        Frequency = 15000 -> peak?
-//        bin = 48000/2048
-//        index = 15000/bin = 640
-//
-//        startAt -> 640
-//        goLeft -> find leftMax
-//        goRight -> find rightMax
-        
-        let bufferSize = self.fftData.count * 2
-        let bin = 48000/bufferSize
-        let index = Int(self.frequency/Float(bin))
-        print(self.frequency)
-        print(index," ", bufferSize/2)
-        
-        
-        let leftArr = Array.init(self.fftData[index-100...index-1])
-        let rightArr = Array.init(self.fftData[index+1...index+100])
-        
-        var leftMax: Float = .nan
-        var leftIndex: vDSP_Length = 0
-        
-        var rightMax: Float = .nan
-        var rightIndex: vDSP_Length = 0
-        let subArrayLength = vDSP_Length(rightArr.count)
+    func takeLocalMaximal(targetArr: [Float])->Float{
+        var maxVal: Float = .nan
+        var maxIndex: vDSP_Length = 0
+        let targetArrLength = vDSP_Length(targetArr.count)
         let stride = vDSP_Stride(1)
-        
-        vDSP_maxvi(leftArr, stride, &leftMax, &leftIndex, subArrayLength)
-        vDSP_maxvi(rightArr, stride, &rightMax, &rightIndex, subArrayLength)
-        
-        allLeftMax.append(leftMax)
-        allRightMax.append(rightMax)
-        
-        print("left: ", allLeftMax)
-        print("right: ",allRightMax)
-        print()
-        
+        vDSP_maxvi(targetArr, stride, &maxVal, &maxIndex, targetArrLength)
+        return maxVal
     }
+    
+    
+    /*
+      [Float]: targetArr: our fftData or zoomed fftData
+      Int:     windowSize: the size for our sliding window -> has to be an even number
+     */
+    func useWindowSliderToFindLocalMaximal(targetArr: [Float], windowSize: Int)->[Float]{
+        var peaks = [Float]()
+        let length = targetArr.count
+        for i in 0...length-windowSize-1{
+            let curArray = Array.init(targetArr[i...i+windowSize])
+            var maxVal: Float = .nan
+            var maxIndex: vDSP_Length = 0
+            let curArrayLength = vDSP_Length(curArray.count)
+            let stride = vDSP_Stride(1)
+            vDSP_maxvi(curArray, stride, &maxVal, &maxIndex, curArrayLength)
+            if (maxIndex == windowSize/2){
+                peaks.append(maxVal)
+            }
+        }
+        return peaks
+    }
+    
     
     func reset(){
         self.fftData = []
         self.frequency = 0.0
         self.state = 0
     }
-    
-    
-    
-    
 }

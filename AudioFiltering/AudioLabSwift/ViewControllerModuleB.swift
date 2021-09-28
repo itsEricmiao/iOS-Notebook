@@ -81,7 +81,7 @@ class ViewControllerModuleB: UIViewController {
                         shouldNormalize: true,
                         numPointsInGraph: 800)
         
-        Timer.scheduledTimer(timeInterval: 0.05, target: self,
+        Timer.scheduledTimer(timeInterval: 0.1, target: self,
             selector: #selector(self.updateGraph),
             userInfo: nil,
             repeats: true)
@@ -94,7 +94,7 @@ class ViewControllerModuleB: UIViewController {
     @objc
     func startDetectingDopplerProcess(){
         audio.startProcessingSinewaveForPlayback(withFreq: self.frequency)
-        audio.startMicrophoneProcessing(withFps: 1000)
+        audio.startMicrophoneProcessing(withFps: 100)
         audio.play()
     }
     
@@ -105,6 +105,7 @@ class ViewControllerModuleB: UIViewController {
     @objc func updateGraph(){
         let zoomed = Array.init(self.audio.fftData[1200...2000])
         self.currentState = self.states[self.audio.getUserState()]
+        self.updateUserActionLabel(index: self.audio.getUserState())
         self.graph?.updateGraph(
             data: zoomed,
             forKey: "microphoneData"
