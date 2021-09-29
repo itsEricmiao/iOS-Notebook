@@ -50,9 +50,11 @@ class DopplerHelper{
              (I also set a thredhold value here to make sure we can detect when user hand is not moving)
         4. Update the state index variable so the UI can gets updated too
      */
+    
     func analyze(){
         let bin = self.samplingRate/Float(self.fftFrames)
         let index = Int(self.frequency/Float(bin))
+        
         if !self.fftData[0].isInfinite{
             let leftArr = Array.init(self.fftData[index-20...index-2])
             let rightArr = Array.init(self.fftData[index+2...index+20])
@@ -69,6 +71,34 @@ class DopplerHelper{
                 self.state = 0
             }
         }
+    }
+    
+    func analyzeUsingWindowMaximals(){
+        let bin = self.samplingRate/Float(self.fftFrames)
+        let index = Int(self.frequency/Float(bin))
+        if !self.fftData[0].isInfinite{
+            let leftArr = Array.init(self.fftData[index-101...index-1])
+            let rightArr = Array.init(self.fftData[index+1...index+101])
+            
+            let leftPeaks = self.useWindowSliderToFindLocalMaximal(targetArr: leftArr, windowSize: 10)
+            let rightPeaks = self.useWindowSliderToFindLocalMaximal(targetArr: rightArr, windowSize: 10)
+            
+            let leftPeak = vDSP.mean(leftPeaks)
+            let rightPeak = vDSP.mean(rightPeaks)
+            
+            let diff = leftPeak - rightPeak
+            
+            print(leftPeak, rightPeak, diff)
+
+            if (leftPeak > rightPeak && diff > -10){
+                self.state = 2
+            }else if (leftPeak < rightPeak && diff < -20){
+                self.state = 1
+            }else{
+                self.state = 0
+            }
+        }
+        
     }
     
     /*
