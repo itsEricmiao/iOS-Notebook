@@ -19,9 +19,6 @@
                         <subviews>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="15000" minValue="15000" maxValue="20000" translatesAutoresizingMaskIntoConstraints="NO" id="TLG-o7-BSw">
                                 <rect key="frame" x="40" y="148" width="334" height="31"/>
-                                <connections>
-                                    <action selector="frequencySliderOnChange:" destination="e34-9C-hao" eventType="valueChanged" id="zVM-aC-2yG"/>
-                                </connections>
                             </slider>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Frequency: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Ae-1x-SjL">
                                 <rect key="frame" x="42" y="100" width="330" height="27"/>
@@ -48,9 +45,6 @@
                                 <rect key="frame" x="249" y="92" width="123" height="42"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Start"/>
-                                <connections>
-                                    <action selector="startAnalyzerButtonPressed:" destination="e34-9C-hao" eventType="touchUpInside" id="Lbr-OZ-YKP"/>
-                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="JoV-eE-8QO"/>
@@ -77,9 +71,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="6bk-0i-7o1"/>
                     <connections>
-                        <outlet property="audioFrequencySlider" destination="TLG-o7-BSw" id="OdN-MC-8db"/>
                         <outlet property="frequencyLabel" destination="5Ae-1x-SjL" id="e9U-Jf-O2a"/>
-                        <outlet property="startAnalyzerButton" destination="jWy-Kx-gMW" id="YDB-4Y-x7h"/>
                         <outlet property="userActionLabel" destination="agq-ts-6Dl" id="BcR-4K-pHQ"/>
                     </connections>
                 </viewController>

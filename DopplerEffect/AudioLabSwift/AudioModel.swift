@@ -202,14 +202,17 @@ class AudioModel {
             helper.setFFTData(inputArr: self.fftData)
             helper.setSamplingRate(inputRate: self.samplingRate)
             helper.setFrequency(inputVal: self.sineFrequency)
-//            helper.analyze()
-            helper.analyzeUsingWindowMaximals()
+            helper.analyze()
+//            helper.analyzeUsingWindowMaximals()
             // at this point, we have saved the data to the arrays:
             //   timeData: the raw audio samples
             //   fftData:  the FFT of those same samples
             // the user can now use these variables however they like
         }
     }
+    
+    
+    
     
     func getUserState()->Int{
         return helper.getUserState()

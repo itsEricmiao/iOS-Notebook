@@ -78,7 +78,7 @@ class ViewControllerModuleB: UIViewController {
                         shouldNormalize: true,
                         numPointsInGraph: 201)
         
-        Timer.scheduledTimer(timeInterval: 0.1, target: self,
+        Timer.scheduledTimer(timeInterval: 0.05, target: self,
             selector: #selector(self.updateGraph),
             userInfo: nil,
             repeats: true)
@@ -106,6 +106,7 @@ class ViewControllerModuleB: UIViewController {
     @objc func updateGraph(){
         let bin = self.audio.samplingRate/Float(self.audio.fftData.count*2)
         let index = Int(self.frequency/Float(bin))
+        print(index)
         let zoomed = Array.init(self.audio.fftData[index-100...index+100])
         self.currentState = self.states[self.audio.getUserState()]
         self.updateUserActionLabel(index: self.audio.getUserState())
