@@ -17,6 +17,7 @@
 		C729EF482719AB880066B113 /* Lab3_moduleAUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C729EF472719AB880066B113 /* Lab3_moduleAUITests.swift */; };
 		C729EF4A2719AB880066B113 /* Lab3_moduleAUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C729EF492719AB880066B113 /* Lab3_moduleAUITestsLaunchTests.swift */; };
 		C7870983271B2EAF00A22629 /* ModuleAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7870982271B2EAF00A22629 /* ModuleAViewController.swift */; };
+		C7870985271B6D7200A22629 /* CircularProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7870984271B6D7200A22629 /* CircularProgressBarView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		C729EF472719AB880066B113 /* Lab3_moduleAUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lab3_moduleAUITests.swift; sourceTree = "<group>"; };
 		C729EF492719AB880066B113 /* Lab3_moduleAUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lab3_moduleAUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		C7870982271B2EAF00A22629 /* ModuleAViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleAViewController.swift; sourceTree = "<group>"; };
+		C7870984271B6D7200A22629 /* CircularProgressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressBarView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,11 +106,12 @@
 				C729EF262719AB870066B113 /* AppDelegate.swift */,
 				C729EF282719AB870066B113 /* SceneDelegate.swift */,
 				C729EF2A2719AB870066B113 /* ViewController.swift */,
+				C7870982271B2EAF00A22629 /* ModuleAViewController.swift */,
 				C729EF2C2719AB870066B113 /* Main.storyboard */,
 				C729EF2F2719AB880066B113 /* Assets.xcassets */,
 				C729EF312719AB880066B113 /* LaunchScreen.storyboard */,
 				C729EF342719AB880066B113 /* Info.plist */,
-				C7870982271B2EAF00A22629 /* ModuleAViewController.swift */,
+				C7870984271B6D7200A22629 /* CircularProgressBarView.swift */,
 			);
 			path = Lab3_moduleA;
 			sourceTree = "<group>";
@@ -265,6 +268,7 @@
 				C729EF2B2719AB870066B113 /* ViewController.swift in Sources */,
 				C729EF272719AB870066B113 /* AppDelegate.swift in Sources */,
 				C729EF292719AB870066B113 /* SceneDelegate.swift in Sources */,
+				C7870985271B6D7200A22629 /* CircularProgressBarView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
