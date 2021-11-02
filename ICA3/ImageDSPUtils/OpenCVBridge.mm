@@ -43,9 +43,6 @@ int greenArr[100];
     const int kCannyLowThreshold = 300;
     const int kFilterKernelSize = 5;
     
-    
-    
-    
     switch (self.processType) {
         case 1:
         {
@@ -257,7 +254,6 @@ int greenArr[100];
             
         default:
             break;
-            
     }
 }
 
