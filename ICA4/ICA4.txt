@@ -1,0 +1,6 @@
+Team members: Josh Sylvester, Canan Ellis, Eric Miao
+11.Is the current method of saving the classifier blocking to the tornado IOLoop? Justify your response.
+Yes it does. In order to save the model, we have to train the model and the training phase blocks the tornado IOLoop.
+
+12. Would the models saved on one server be useable by another server if we migrated the saved documents in MongoDB? Justify your response.
+No. Because the model is saved in a data folder separate from MongoDB. However, we could retrain the model from the migrated MongoDB data and train the new model individually.
