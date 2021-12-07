@@ -38,6 +38,15 @@
                                     <action selector="flipCameraButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="HCd-d8-wFh"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="s6P-7q-feR">
+                                <rect key="frame" x="109" y="738" width="197" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Vibrate 5 times"/>
+                                <connections>
+                                    <action selector="testButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="vPZ-1V-VHN"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -46,6 +55,7 @@
                         <outlet property="cameraView" destination="gyv-4X-EXN" id="ltT-SG-g0M"/>
                         <outlet property="flipCameraButton" destination="5kb-sZ-tve" id="fzv-k0-83C"/>
                         <outlet property="gameButton" destination="O5U-Z8-M3f" id="7bG-GR-pqe"/>
+                        <outlet property="testButton" destination="s6P-7q-feR" id="qOs-XL-uuK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

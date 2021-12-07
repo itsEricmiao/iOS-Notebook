@@ -21,6 +21,7 @@ class ViewController: UIViewController, FrameExtractorDelegate {
     @IBOutlet weak var gameButton: UIButton!
     @IBOutlet weak var flipCameraButton: UIButton!
     @IBOutlet weak var cameraView: UIImageView!
+    @IBOutlet weak var testButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,19 +47,19 @@ class ViewController: UIViewController, FrameExtractorDelegate {
     }
     
     
-    // MARK: Testing purpose only -> when sense a touch, produce a series of haptic vibrations
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    @IBAction func testButtonPressed(_ sender: Any) {
+        vibrate(repeatCount: 5)
+    }
+    
+    // vibrate based on time
+    func vibrate(repeatCount: Int){
         guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
         
         var events = [CHHapticEvent]()
-        
-        for i in stride(from: 0, to: 1, by: 0.1) {
-            let intensity = CHHapticEventParameter(parameterID: .hapticIntensity, value: Float(1 - i))
-            let sharpness = CHHapticEventParameter(parameterID: .hapticSharpness, value: Float(1 - i))
-            let event = CHHapticEvent(eventType: .hapticTransient, parameters: [intensity, sharpness], relativeTime: i)
+        for i in stride(from: 0, to: repeatCount, by: 1) {
+            let event = CHHapticEvent(eventType: .hapticContinuous, parameters: [], relativeTime: Double(i)/2, duration: 0.4)
             events.append(event)
         }
-        
         do {
             let pattern = try CHHapticPattern(events: events, parameters: [])
             let player = try engine?.makePlayer(with: pattern)
@@ -68,13 +69,14 @@ class ViewController: UIViewController, FrameExtractorDelegate {
         }
     }
     
+
     
     func captured(image: UIImage) {
         DispatchQueue.main.async { // Does not work without this dispatch
             self.cameraView.image = image
         }
-         let convertedImage = convertImageToBase64String(img: image);
-         print(convertedImage)
+        //         let convertedImage = convertImageToBase64String(img: image);
+        //         print(convertedImage)
     }
     
     
